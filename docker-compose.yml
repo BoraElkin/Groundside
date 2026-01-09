@@ -1,0 +1,116 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: groundops-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-groundops}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-groundops}
+      POSTGRES_DB: ${POSTGRES_DB:-groundops}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U groundops"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: groundops-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: groundops-backend
+    environment:
+      - DATABASE_URL=postgresql://groundops:groundops@postgres:5432/groundops
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+      - DEBUG=${DEBUG:-true}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ./ml/models:/app/ml/models
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  celery-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: groundops-celery-worker
+    environment:
+      - DATABASE_URL=postgresql://groundops:groundops@postgres:5432/groundops
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    volumes:
+      - ./backend:/app
+      - ./ml/models:/app/ml/models
+    depends_on:
+      - redis
+      - postgres
+    command: celery -A workers.celery_app worker --loglevel=info
+
+  celery-beat:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: groundops-celery-beat
+    environment:
+      - DATABASE_URL=postgresql://groundops:groundops@postgres:5432/groundops
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - redis
+      - postgres
+    command: celery -A workers.celery_app beat --loglevel=info
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: groundops-frontend
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    stdin_open: true
+    tty: true
+
+volumes:
+  postgres_data:
+  redis_data:

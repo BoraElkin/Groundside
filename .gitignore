@@ -1,0 +1,99 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite3
+*.sqlite
+
+# ML Models and Data
+ml/data/*
+!ml/data/.gitkeep
+ml/models/*
+!ml/models/.gitkeep
+*.pkl
+*.joblib
+*.h5
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Build outputs
+frontend/dist/
+frontend/build/
+*.tsbuildinfo
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Azure
+.azure/
+
+# Redis
+dump.rdb
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
