@@ -11,7 +11,8 @@ from datetime import datetime
 
 from config import settings
 from models.database import engine, Base
-from api.routes import flights, turnarounds, alerts, analytics
+from api.routes import flights, turnarounds, alerts, analytics, customers
+from api.metering import MeteringMiddleware
 
 
 # Configure structured logging
@@ -97,6 +98,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Add API metering middleware
+app.add_middleware(MeteringMiddleware)
+
 
 # Health check endpoint
 @app.get("/health")
@@ -180,6 +184,12 @@ app.include_router(
     analytics.router,
     prefix=f"{settings.api_v1_prefix}/analytics",
     tags=["analytics"]
+)
+
+app.include_router(
+    customers.router,
+    prefix=f"{settings.api_v1_prefix}/customers",
+    tags=["customers"]
 )
 
 

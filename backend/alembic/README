@@ -1,0 +1,10 @@
+Generic single-database configuration with async support for SQLAlchemy.
+
+To create a new migration:
+    docker-compose exec backend alembic revision --autogenerate -m "description"
+
+To apply migrations:
+    docker-compose exec backend alembic upgrade head
+
+To revert migration:
+    docker-compose exec backend alembic downgrade -1
