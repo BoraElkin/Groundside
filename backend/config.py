@@ -46,6 +46,9 @@ class Settings(BaseSettings):
     anthropic_api_key: str = ""
     flightaware_api_key: str = ""
 
+    # LLM Settings
+    llm_model: str = "claude-sonnet-4-20250514"
+
     # Azure Storage
     azure_storage_connection_string: str = ""
     azure_storage_container: str = "ground-ops-data"

@@ -11,7 +11,7 @@ from datetime import datetime
 
 from config import settings
 from models.database import engine, Base
-from api.routes import flights, turnarounds, alerts, analytics, customers
+from api.routes import flights, turnarounds, alerts, analytics, customers, disputes
 from api.metering import MeteringMiddleware
 
 
@@ -190,6 +190,12 @@ app.include_router(
     customers.router,
     prefix=f"{settings.api_v1_prefix}/customers",
     tags=["customers"]
+)
+
+app.include_router(
+    disputes.router,
+    prefix=f"{settings.api_v1_prefix}/disputes",
+    tags=["disputes"]
 )
 
 
