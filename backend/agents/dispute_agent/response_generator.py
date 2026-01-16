@@ -5,7 +5,8 @@ from typing import Dict, Any, Optional, List
 from datetime import datetime
 import structlog
 
-from agents.shared.llm_client import LLMClient
+from agents.shared.llm_client import LLMFactory
+from agents.shared.base_llm_client import BaseLLMClient
 from agents.shared.prompts import (
     DISPUTE_RESPONSE_GENERATION_PROMPT,
     EVIDENCE_SUMMARIZATION_PROMPT,
@@ -17,17 +18,17 @@ logger = structlog.get_logger()
 
 class ResponseGenerator:
     """
-    Generates professional dispute response letters.
+    Generates professional dispute response letters using configured LLM provider.
     """
 
-    def __init__(self, llm_client: Optional[LLMClient] = None):
+    def __init__(self, llm_client: Optional[BaseLLMClient] = None):
         """
         Initialize response generator.
 
         Args:
-            llm_client: LLM client (creates new one if not provided)
+            llm_client: LLM client (creates default from factory if not provided)
         """
-        self.llm_client = llm_client or LLMClient()
+        self.llm_client = llm_client or LLMFactory.create_default()
 
     async def generate(
         self,

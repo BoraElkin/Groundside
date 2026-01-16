@@ -6,7 +6,8 @@ from typing import Dict, Any, Optional
 from datetime import datetime
 import structlog
 
-from agents.shared.llm_client import LLMClient
+from agents.shared.llm_client import LLMFactory
+from agents.shared.base_llm_client import BaseLLMClient
 from agents.shared.prompts import PENALTY_EXTRACTION_PROMPT
 
 logger = structlog.get_logger()
@@ -14,17 +15,17 @@ logger = structlog.get_logger()
 
 class PenaltyExtractor:
     """
-    Extracts penalty details from uploaded documents using Claude.
+    Extracts penalty details from uploaded documents using configured LLM provider.
     """
 
-    def __init__(self, llm_client: Optional[LLMClient] = None):
+    def __init__(self, llm_client: Optional[BaseLLMClient] = None):
         """
         Initialize penalty extractor.
 
         Args:
-            llm_client: LLM client (creates new one if not provided)
+            llm_client: LLM client (creates default from factory if not provided)
         """
-        self.llm_client = llm_client or LLMClient()
+        self.llm_client = llm_client or LLMFactory.create_default()
 
     async def extract_from_text(self, document_text: str) -> Dict[str, Any]:
         """

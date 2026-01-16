@@ -47,7 +47,9 @@ class Settings(BaseSettings):
     flightaware_api_key: str = ""
 
     # LLM Settings
-    llm_model: str = "claude-sonnet-4-20250514"
+    llm_provider: str = "anthropic"  # "anthropic" or "openai"
+    llm_model: str = "claude-sonnet-4-20250514"  # Anthropic model
+    openai_model: str = "gpt-4-turbo-preview"  # OpenAI model
 
     # Azure Storage
     azure_storage_connection_string: str = ""

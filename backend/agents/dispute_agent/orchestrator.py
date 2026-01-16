@@ -14,28 +14,29 @@ from agents.dispute_agent.state_machine import DisputeStateMachine
 from agents.dispute_agent.penalty_extractor import PenaltyExtractor
 from agents.dispute_agent.root_cause_analyzer import RootCauseAnalyzer
 from agents.dispute_agent.response_generator import ResponseGenerator
-from agents.shared.llm_client import LLMClient
+from agents.shared.llm_client import LLMFactory
+from agents.shared.base_llm_client import BaseLLMClient
 
 logger = structlog.get_logger()
 
 
 class DisputeOrchestrator:
     """
-    Orchestrates the complete dispute resolution workflow.
+    Orchestrates the complete dispute resolution workflow using configured LLM provider.
     """
 
-    def __init__(self, db: AsyncSession, llm_client: Optional[LLMClient] = None):
+    def __init__(self, db: AsyncSession, llm_client: Optional[BaseLLMClient] = None):
         """
         Initialize orchestrator.
 
         Args:
             db: Database session
-            llm_client: Shared LLM client (creates new one if not provided)
+            llm_client: Shared LLM client (creates default from factory if not provided)
         """
         self.db = db
-        self.llm_client = llm_client or LLMClient()
+        self.llm_client = llm_client or LLMFactory.create_default()
 
-        # Initialize agent components
+        # Initialize agent components with shared LLM client
         self.penalty_extractor = PenaltyExtractor(self.llm_client)
         self.root_cause_analyzer = RootCauseAnalyzer(self.llm_client)
         self.response_generator = ResponseGenerator(self.llm_client)

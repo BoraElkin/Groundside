@@ -5,7 +5,8 @@ from typing import Dict, Any, Optional, List
 from datetime import datetime
 import structlog
 
-from agents.shared.llm_client import LLMClient
+from agents.shared.llm_client import LLMFactory
+from agents.shared.base_llm_client import BaseLLMClient
 from agents.shared.prompts import ROOT_CAUSE_ANALYSIS_PROMPT
 from agents.shared.iata_codes import get_standard_time, is_within_standard
 
@@ -14,17 +15,17 @@ logger = structlog.get_logger()
 
 class RootCauseAnalyzer:
     """
-    Analyzes delay root cause and assigns responsibility percentages.
+    Analyzes delay root cause and assigns responsibility percentages using configured LLM provider.
     """
 
-    def __init__(self, llm_client: Optional[LLMClient] = None):
+    def __init__(self, llm_client: Optional[BaseLLMClient] = None):
         """
         Initialize root cause analyzer.
 
         Args:
-            llm_client: LLM client (creates new one if not provided)
+            llm_client: LLM client (creates default from factory if not provided)
         """
-        self.llm_client = llm_client or LLMClient()
+        self.llm_client = llm_client or LLMFactory.create_default()
 
     async def analyze(
         self,
