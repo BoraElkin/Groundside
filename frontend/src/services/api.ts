@@ -151,4 +151,57 @@ export const getHourlyPerformance = async (hours = 24) => {
   return response.data
 }
 
+// Disputes API
+export const getDisputes = async (params?: any) => {
+  const response = await api.get('/disputes', { params })
+  return response.data
+}
+
+export const getDispute = async (id: string) => {
+  const response = await api.get(`/disputes/${id}`)
+  return response.data
+}
+
+export const getDisputeStatus = async (id: string) => {
+  const response = await api.get(`/disputes/${id}/status`)
+  return response.data
+}
+
+export const getDisputeStats = async (days = 30) => {
+  const response = await api.get('/disputes/stats', {
+    params: { days },
+  })
+  return response.data
+}
+
+export const createDispute = async (data: any) => {
+  const response = await api.post('/disputes', data)
+  return response.data
+}
+
+export const uploadPenaltyNotice = async (file: File) => {
+  const formData = new FormData()
+  formData.append('file', file)
+  const response = await api.post('/disputes/upload', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+  return response.data
+}
+
+export const analyzeDispute = async (id: string, activities: any[]) => {
+  const response = await api.post(`/disputes/${id}/analyze`, { activities })
+  return response.data
+}
+
+export const regenerateResponse = async (id: string, feedback: string) => {
+  const response = await api.post(`/disputes/${id}/regenerate`, { feedback })
+  return response.data
+}
+
+export const deleteDispute = async (id: string) => {
+  await api.delete(`/disputes/${id}`)
+}
+
 export default api
