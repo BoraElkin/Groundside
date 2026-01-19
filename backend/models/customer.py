@@ -99,7 +99,7 @@ class APIKey(Base):
     __tablename__ = "api_keys"
 
     id = Column(String, primary_key=True, index=True)
-    customer_id = Column(String, nullable=False, index=True)
+    customer_id = Column(String, ForeignKey("customers.id"), nullable=False, index=True)
 
     # Key details
     key_hash = Column(String, nullable=False, unique=True, index=True)  # Hashed API key
@@ -139,7 +139,7 @@ class APIUsage(Base):
     __tablename__ = "api_usage"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    customer_id = Column(String, nullable=False, index=True)
+    customer_id = Column(String, ForeignKey("customers.id"), nullable=False, index=True)
     api_key_id = Column(String, index=True)
 
     # Request details
