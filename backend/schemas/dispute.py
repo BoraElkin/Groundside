@@ -125,7 +125,7 @@ class DisputeResponse(BaseModel):
     # Response
     dispute_response_text: Optional[str]
     user_edited_response: Optional[str]
-    recommendation: DisputeRecommendation
+    recommendation: Optional[DisputeRecommendation]
     confidence_score: Optional[float]
 
     # Files
@@ -200,8 +200,8 @@ class DisputeStats(BaseModel):
     total_savings: float
     win_rate_percentage: float
     avg_time_to_resolve_minutes: float
-    disputes_by_state: Dict[DisputeState, int]
-    disputes_by_recommendation: Dict[DisputeRecommendation, int]
+    disputes_by_state: Dict[str, int]  # Changed from Enum to str
+    disputes_by_recommendation: Dict[str, int]  # Changed from Enum to str
 
 
 class PenaltyExtractionResult(BaseModel):

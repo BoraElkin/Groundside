@@ -208,8 +208,8 @@ async def get_dispute_stats(
         total_savings=total_savings,
         win_rate_percentage=win_rate_percentage,
         avg_time_to_resolve_minutes=avg_time_to_resolve_minutes,
-        disputes_by_state=disputes_by_state,
-        disputes_by_recommendation=disputes_by_recommendation,
+        disputes_by_state={state.value: count for state, count in disputes_by_state.items()},
+        disputes_by_recommendation={rec.value: count for rec, count in disputes_by_recommendation.items()},
     )
 
 
