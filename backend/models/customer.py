@@ -1,7 +1,7 @@
 """
 Customer/Organization models for multi-tenancy.
 """
-from sqlalchemy import Column, String, Integer, Boolean, DateTime, Enum as SQLEnum, JSON, Numeric
+from sqlalchemy import Column, String, Integer, Boolean, DateTime, Enum as SQLEnum, JSON, Numeric, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from datetime import datetime
