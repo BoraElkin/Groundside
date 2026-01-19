@@ -12,7 +12,8 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=False,
-        extra="allow"
+        extra="allow",
+        protected_namespaces=()  # Allow fields starting with 'model_'
     )
 
     # Application

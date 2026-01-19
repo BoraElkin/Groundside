@@ -1,7 +1,7 @@
 """
 Alert model for notifications and warnings.
 """
-from sqlalchemy import Column, String, DateTime, Integer, Boolean, Enum, ForeignKey, Text
+from sqlalchemy import Column, String, DateTime, Integer, Boolean, Enum, ForeignKey, Text, Float
 from sqlalchemy.orm import relationship
 from datetime import datetime
 import enum
