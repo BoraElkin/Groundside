@@ -89,7 +89,7 @@ class Alert(Base):
 
     # Metadata
     source = Column(String(50))  # e.g., "delay_predictor", "llm_transcript_parser"
-    metadata = Column(Text)  # JSON object with additional context
+    alert_metadata = Column(Text)  # JSON object with additional context
 
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
