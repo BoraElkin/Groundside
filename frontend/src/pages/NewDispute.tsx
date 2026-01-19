@@ -264,13 +264,14 @@ const NewDispute = () => {
                     type="number"
                     required
                     min="0"
-                    value={formData.claimed_delay_minutes}
+                    value={formData.claimed_delay_minutes === 0 ? '' : formData.claimed_delay_minutes}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        claimed_delay_minutes: parseInt(e.target.value) || 0,
+                        claimed_delay_minutes: e.target.value === '' ? 0 : parseInt(e.target.value),
                       })
                     }
+                    placeholder="e.g. 45"
                     className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -285,13 +286,14 @@ const NewDispute = () => {
                       required
                       min="0"
                       step="0.01"
-                      value={formData.penalty_amount}
+                      value={formData.penalty_amount === 0 ? '' : formData.penalty_amount}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
-                          penalty_amount: parseFloat(e.target.value) || 0,
+                          penalty_amount: e.target.value === '' ? 0 : parseFloat(e.target.value),
                         })
                       }
+                      placeholder="e.g. 5000"
                       className="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <select
