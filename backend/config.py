@@ -12,7 +12,8 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=False,
-        extra="allow"
+        extra="allow",
+        protected_namespaces=()  # Allow fields starting with 'model_'
     )
 
     # Application
@@ -45,6 +46,11 @@ class Settings(BaseSettings):
     openai_api_key: str = ""
     anthropic_api_key: str = ""
     flightaware_api_key: str = ""
+
+    # LLM Settings
+    llm_provider: str = "anthropic"  # "anthropic" or "openai"
+    llm_model: str = "claude-sonnet-4-20250514"  # Anthropic model
+    openai_model: str = "gpt-4-turbo-preview"  # OpenAI model
 
     # Azure Storage
     azure_storage_connection_string: str = ""

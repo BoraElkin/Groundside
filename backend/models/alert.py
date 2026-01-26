@@ -1,7 +1,7 @@
 """
 Alert model for notifications and warnings.
 """
-from sqlalchemy import Column, String, DateTime, Integer, Boolean, Enum, ForeignKey, Text
+from sqlalchemy import Column, String, DateTime, Integer, Boolean, Enum, ForeignKey, Text, Float
 from sqlalchemy.orm import relationship
 from datetime import datetime
 import enum
@@ -89,7 +89,7 @@ class Alert(Base):
 
     # Metadata
     source = Column(String(50))  # e.g., "delay_predictor", "llm_transcript_parser"
-    metadata = Column(Text)  # JSON object with additional context
+    alert_metadata = Column(Text)  # JSON object with additional context
 
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
